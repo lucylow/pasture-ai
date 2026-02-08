@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
+    "build:dev": "vite build --mode development",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start"
@@ -65,7 +66,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.9",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
