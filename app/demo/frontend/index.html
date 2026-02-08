@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>PastureAI Demo</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Roboto, Arial; padding: 24px; }
+    .card { border: 1px solid #e6e6e6; padding: 16px; border-radius: 8px; max-width: 820px; }
+    img { max-width: 400px; height: auto; display: block; margin-bottom: 8px; }
+    .result { margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>PastureAI — Demo</h1>
+  <div class="card">
+    <p>Upload an image to get a mock biomass prediction (deterministic demo).</p>
+    <input id="fileinput" type="file" accept="image/*" />
+    <button id="uploadBtn">Upload & Predict</button>
+    <div id="preview"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
-  "private": true,
+  "name": "pasture-ai",
+  "version": "1.0.0",
+  "description": "Precision Regenerative Agriculture AI",
   "scripts": {
     "build": "next build",
     "build:dev": "vite build --mode development",

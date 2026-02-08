@@ -16,6 +16,22 @@ Your project is live at:
 
 **[https://vercel.com/lucylows-projects/v0-pasture-ai-landing-page](https://vercel.com/lucylows-projects/v0-pasture-ai-landing-page)**
 
+## AI Backend Integration
+
+This project now includes a robust AI model training and inference pipeline.
+
+### Components
+- **Inference Server**: FastAPI app in `app/` providing REST endpoints for biomass prediction.
+- **Farmer UX Layer**: Accessible, offline-first mobile view for real-field decisions in `src/pages/FarmerView.tsx`.
+- **Model Training**: Orchestration script in `training/` using DINOv2 embeddings.
+- **Export Tools**: ONNX export utility in `tools/` for mobile deployment.
+- **Testing**: Unit tests in `app/tests/`.
+
+### Getting Started (Backend)
+1. Install dependencies: `pip install -r requirements.txt`
+2. Run the server: `uvicorn app.main:app --reload`
+3. Predict: `POST /api/v1/biomass/predict` with an image file.
+
 ## Build your app
 
 Continue building your app on:

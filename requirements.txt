@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+torch
+torchvision
+transformers
+pillow
+numpy
+pandas
+scikit-learn
+joblib
+python-multipart
+pytest
+httpx
