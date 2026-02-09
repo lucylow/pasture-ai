@@ -1,14 +1,20 @@
 from fastapi import APIRouter, HTTPException, Response
 from typing import List, Dict
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import uuid
 from app.schemas import (
     InferenceRequest, TilePrediction, SimulationRequest, SimulationResponse,
     AuditLog, FullBiomassPredictionResponse, ForecastItem, Recommendation,
     Explainability, Provenance
 )
+from fastapi import UploadFile, File, Depends
+from app.services.image2biomass_service import UnifiedBiomassService
+from pydantic import BaseModel
+import io
+from PIL import Image
 
 router = APIRouter(prefix="/api/v1/pastures", tags=["image2biomass"])
+biomass_service = UnifiedBiomassService(mode='demo')
 
 @router.post("/{pasture_id}/predict")
 async def trigger_inference(pasture_id: str, request: InferenceRequest):
@@ -30,7 +36,7 @@ async def get_tile_mvt(pasture_id: str, z: int, x: int, y: int):
     # Mocking a binary response for MVT
     return Response(content=b"", media_type="application/x-protobuf", headers={
         "X-Model-Version": "biomass-v3.2",
-        "X-Timestamp": datetime.utcnow().isoformat()
+        "X-Timestamp": lambda: datetime.now(timezone.utc)().isoformat()
     })
 
 @router.get("/{pasture_id}/tiles/{z}/{x}/{y}.json", response_model=TilePrediction)
@@ -48,7 +54,7 @@ async def get_tile_json(pasture_id: str, z: int, x: int, y: int):
         biomass_mean=2.8,
         biomass_std=0.22,
         model_version="biomass-v3.2",
-        timestamp=datetime.utcnow(),
+        timestamp=lambda: datetime.now(timezone.utc)(),
         provenance={"sources": ["satellite", "drone"]}
     )
 
@@ -79,9 +85,49 @@ async def create_audit_log(log: AuditLog):
     return {"status": "logged", "id": log.id}
 
 # Adding the mock full response for frontend demo as mentioned in section 11
+class BiomassRequest(BaseModel):
+    mode: str = 'demo'  # demo|csiro|onnx
+    include_recs: bool = True
+
+@router.post("/predict_csiro", response_model=Dict[str, Any])
+async def predict_csiro(
+    request: BiomassRequest = Depends(),
+    file: UploadFile = File(...)
+):
+    """
+    CSIRO-grade biomass estimation from pasture imagery.
+    Supports multi-target regression (Green, Dead, Clover, GDM, Total).
+    """
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
+    
+    contents = await file.read()
+    # Use a fresh service instance if mode is different
+    service = biomass_service if request.mode == biomass_service.mode else UnifiedBiomassService(mode=request.mode)
+    result = await service.predict(contents, include_recs=request.include_recs)
+    
+    return {
+        "predictions": result,
+        "model": request.mode,
+        "quadrat_scale": "70cm x 30cm (CSIRO standard)"
+    }
+
+@router.post("/batch_predict_csiro", response_model=Dict[str, Any])
+async def batch_predict_csiro(
+    mode: str = 'demo',
+    files: List[UploadFile] = File(...)
+):
+    """Batch processing for multiple pasture images"""
+    service = biomass_service if mode == biomass_service.mode else UnifiedBiomassService(mode=mode)
+    contents_list = []
+    for file in files[:50]: # Limit to 50 for demo
+        contents_list.append(await file.read())
+    
+    return await service.batch_predict(contents_list)
+
 @router.get("/{pasture_id}/prediction_summary", response_model=FullBiomassPredictionResponse)
 async def get_prediction_summary(pasture_id: str):
-    now = datetime.utcnow()
+    now = lambda: datetime.now(timezone.utc)()
     return FullBiomassPredictionResponse(
         pastureId=pasture_id,
         timestamp=now,

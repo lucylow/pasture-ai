@@ -29,9 +29,9 @@ const FarmerView = () => {
             </Link>
             <div className="flex gap-4">
               <Link to="/sustainability" className="text-green-100 hover:text-white text-sm font-bold uppercase tracking-tight">Sustainability</Link>
-              <Badge className="bg-green-700 text-green-100 border-none px-3 py-1">
+              <div className="inline-flex items-center rounded-full bg-green-700 text-green-100 border-none px-3 py-1 text-xs font-semibold">
                 FIELD MODE ACTIVE
-              </Badge>
+              </div>
             </div>
           </div>
           

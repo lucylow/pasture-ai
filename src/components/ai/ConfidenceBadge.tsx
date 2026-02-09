@@ -9,9 +9,9 @@ export function ConfidenceBadge({ mean }: { mean: number }) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Confidence</span>
-      <Badge variant="secondary" className={`${color} border-none font-bold py-1`}>
+      <div className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-bold ${color} border-none`}>
         {confidenceText}
-      </Badge>
+      </div>
     </div>
   );
 }

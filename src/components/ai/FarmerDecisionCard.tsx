@@ -31,9 +31,9 @@ export function FarmerDecisionCard({ prediction }: { prediction: BiomassPredicti
       <div className={`h-4 w-full ${action === 'GRAZE' ? 'bg-green-600' : action === 'REST' ? 'bg-red-600' : 'bg-amber-500'}`} />
       <CardHeader className="pb-4 pt-6">
         <div className="flex justify-between items-start mb-2">
-          <Badge className={`${colors[action]} text-lg px-4 py-1 uppercase font-black`}>
-            {actionEmoji[action]} {translatedAction}
-          </Badge>
+          <div className={`inline-flex items-center rounded-full border px-4 py-1 text-lg uppercase font-black ${colors[action] || colors.WAIT}`}>
+            {actionEmoji[action] || "⏳"} {translatedAction}
+          </div>
           <ReadAloudButton text={textToRead} />
         </div>
         <CardTitle className="text-4xl font-extrabold text-slate-900 leading-tight">

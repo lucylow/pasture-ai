@@ -1,46 +1,70 @@
-# PastureAI
+# PastureAI: Real-Time Biomass Estimation for Sustainable Grazing
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+PastureAI is an end-to-end AI-driven platform designed to revolutionize pasture management through high-precision biomass estimation and vegetation health monitoring. By leveraging multispectral drone imagery and advanced machine learning, PastureAI provides farmers with actionable insights to optimize grazing rotations, improve feed planning, and promote regenerative agricultural practices.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/lucylows-projects/v0-pasture-ai-landing-page)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/nKcKNocVc96)
+## 🚀 Core Features
 
-## Overview
+- **Image2Biomass Pipeline**: A robust data lifecycle from raw drone imagery to precise biomass metrics.
+- **Multispectral Analysis**: Automated computation of vegetation indices including **NDVI**, **EVI**, and **GNDVI**.
+- **Deterministic Mock Predictor**: A high-performance, interpretable baseline for rapid demo and UI/UX validation.
+- **Active Learning Framework**: Human-in-the-loop workflow using uncertainty sampling to optimize labeling efforts.
+- **Production-Ready Orchestration**: Integrated Airflow DAGs for automated data ingestion and preprocessing.
+- **Edge Deployment**: Utilities for exporting models to **ONNX** for mobile and edge device integration.
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## 🛠 Project Architecture
 
-## Deployment
+### 1. Data Pipeline (`data_pipeline/`)
+- **Ingestion**: Automated EXIF/GPS extraction from drone imagery.
+- **Preprocessing**: Radiometric conversion and GeoTIFF standardization.
+- **Patch Sampling**: Sliding-window extraction for training data preparation.
+- **CLI**: Unified command-line interface for managing the entire pipeline.
 
-Your project is live at:
+### 2. AI & Inference (`app/`)
+- **Mock Inference**: Deterministic heuristics for reproducible biomass estimation.
+- **Schemas**: Pydantic-validated data models for robust API communication.
+- **API**: FastAPI-powered endpoints for single and batch prediction processing.
 
-**[https://vercel.com/lucylows-projects/v0-pasture-ai-landing-page](https://vercel.com/lucylows-projects/v0-pasture-ai-landing-page)**
+### 3. Orchestration & Ops
+- **Airflow**: Scheduled DAGs for end-to-end data workflows.
+- **Docker**: Containerized environment for consistent local and cloud deployment.
+- **Testing**: Comprehensive Pytest suite for pipeline and model validation.
 
-## AI Backend Integration
+## 🚦 Getting Started
 
-This project now includes a robust AI model training and inference pipeline.
+### Prerequisites
+- Python 3.10+
+- Docker & Docker Compose (optional)
 
-### Components
-- **Inference Server**: FastAPI app in `app/` providing REST endpoints for biomass prediction.
-- **Farmer UX Layer**: Accessible, offline-first mobile view for real-field decisions in `src/pages/FarmerView.tsx`.
-- **Model Training**: Orchestration script in `training/` using DINOv2 embeddings.
-- **Export Tools**: ONNX export utility in `tools/` for mobile deployment.
-- **Testing**: Unit tests in `app/tests/`.
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/lucylow/pasture-ai.git
+cd pasture-ai
 
-### Getting Started (Backend)
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run the server: `uvicorn app.main:app --reload`
-3. Predict: `POST /api/v1/biomass/predict` with an image file.
+# Set up the environment
+bash scripts/create_demo_env.sh
+```
 
-## Build your app
+### Running the Demo
+```bash
+# Start the FastAPI server
+uvicorn app.main:app --reload --port 8000
+```
 
-Continue building your app on:
+### Using the CLI
+```bash
+# Ingest drone images
+python -m data_pipeline.cli ingest --src /path/to/images --out data/catalog.csv
 
-**[https://v0.app/chat/nKcKNocVc96](https://v0.app/chat/nKcKNocVc96)**
+# Compute vegetation indices
+python -m data_pipeline.cli indices --tif data/scene.tif --out data/indices/
+```
 
-## How It Works
+## 📊 Active Learning Workflow
+PastureAI implements a pool-based uncertainty sampling strategy. The `ActiveLearner` uses a RandomForest ensemble to identify patches with the highest prediction variance, ensuring that human labeling effort is focused on the most informative data points.
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## 📜 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+*Developed for the Code Spring Hackathon 2026.*

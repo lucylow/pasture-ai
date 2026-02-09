@@ -50,7 +50,8 @@ export default function SustainabilityDashboard({ farmId }: SustainabilityDashbo
     if (!report) return;
     // demo paddocks pulled from report (or use API)
     const paddocks = Object.entries(report.latest_by_paddock).map(([pid, r]) => {
-      return { id: Number(pid), area_ha: 1.0, biomass_g_m2: r.dry_biomass_g_m2 || 200.0 };
+      const paddockData = r as PaddockData;
+      return { id: Number(pid), area_ha: 1.0, biomass_g_m2: paddockData.dry_biomass_g_m2 || 200.0 };
     });
     const payload = { paddocks, total_animal_units: 20, planning_horizon_days: 60, rest_days_required: 21 };
     
@@ -189,18 +190,21 @@ export default function SustainabilityDashboard({ farmId }: SustainabilityDashbo
                     </tr>
                   </thead>
                   <tbody className="[&_tr:last-child]:border-0">
-                    {Object.entries(report.latest_by_paddock).map(([pid, r]) => (
-                      <tr key={pid} className="border-b transition-colors hover:bg-muted/50">
-                        <td className="p-4 align-middle font-medium">Paddock {pid}</td>
-                        <td className="p-4 align-middle text-muted-foreground">
-                          {new Date(r.recorded_at).toLocaleDateString()}
-                        </td>
-                        <td className="p-4 align-middle text-right">{Math.round(r.dry_biomass_g_m2)}</td>
-                        <td className="p-4 align-middle text-right font-semibold text-emerald-600">
-                          {Math.round(r.co2e_kg).toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
+                    {Object.entries(report.latest_by_paddock).map(([pid, r]) => {
+                      const paddockData = r as PaddockData;
+                      return (
+                        <tr key={pid} className="border-b transition-colors hover:bg-muted/50">
+                          <td className="p-4 align-middle font-medium">Paddock {pid}</td>
+                          <td className="p-4 align-middle text-muted-foreground">
+                            {new Date(paddockData.recorded_at).toLocaleDateString()}
+                          </td>
+                          <td className="p-4 align-middle text-right">{Math.round(paddockData.dry_biomass_g_m2)}</td>
+                          <td className="p-4 align-middle text-right font-semibold text-emerald-600">
+                            {Math.round(paddockData.co2e_kg).toLocaleString()}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

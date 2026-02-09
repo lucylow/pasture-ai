@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install fastapi[all] pillow numpy uvicorn pytest
+# Use system python to install dependencies for the demo
+# In this environment, we'll just use the pre-installed packages or install them via pip
+echo "Installing dependencies..."
+pip3 install fastapi uvicorn pydantic pydantic-settings pillow numpy pandas opencv-python-headless pytest httpx
 
 # generate mock dataset
-python mock_data/generate_synthetic_dataset.py --n 200
+echo "Generating mock dataset..."
+python3 mock_data/generate_synthetic_dataset.py --n 200
 
-# run the demo
-uvicorn app.main:app --reload --port 8000
+echo "Environment ready. Run 'uvicorn app.main:app --port 8000' to start the API."

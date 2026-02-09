@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.sustainability import models as s_models
@@ -52,7 +52,7 @@ def create_record(payload: RecordIn, db: Session = Depends(get_db)):
         biodiversity = None
     rec = s_models.SustainabilityRecord(
         paddock_id=payload.paddock_id,
-        recorded_at=datetime.utcnow(),
+        recorded_at=lambda: datetime.now(timezone.utc)(),
         source=payload.source,
         area_m2=payload.area_m2,
         ndvi_mean=payload.ndvi_mean,

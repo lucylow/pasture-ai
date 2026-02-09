@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Dict, Optional, List
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 
 class BiomassPredictions(BaseModel):
@@ -68,7 +68,7 @@ class Post(BaseModel):
     type: PostType
     content: str
     media_url: Optional[str] = None
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     reactions: Dict[str, int] = {}
     comments_count: int = 0
     peer_validated: bool = False
@@ -104,7 +104,7 @@ class ImageryMetadata(BaseModel):
     gcs_uri: str
     bbox: List[float] # [min_lng, min_lat, max_lng, max_lat]
     crs: str = "EPSG:4326"
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class TilePrediction(BaseModel):
     id: str
@@ -130,7 +130,7 @@ class GroundTruthSample(BaseModel):
 
 class AuditLog(BaseModel):
     id: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     user_id: str
     action: str
     model_version: str

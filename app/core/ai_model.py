@@ -6,7 +6,7 @@ Server-side model integration for PastureAI.
 """
 from pathlib import Path
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, List, Dict, Any
 
 import torch
@@ -130,7 +130,7 @@ class BiomassPredictor:
             "confidence_score": float(min(health_probs[health_idx] * 0.7 + 0.3, 1.0)),
             "processing_time_ms": processing_time_ms,
             "model_version": str(self.model_path.name),
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": lambda: datetime.now(timezone.utc)().isoformat()
         }
         if metadata:
             result["metadata"] = metadata

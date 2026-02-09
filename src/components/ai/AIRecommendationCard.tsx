@@ -40,9 +40,9 @@ export function AIRecommendationCard({
               </div>
             )}
           </div>
-          <Badge variant="outline" className={actionColors[rec.action]}>
+          <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${actionColors[rec.action]}`}>
             {rec.action}
-          </Badge>
+          </div>
         </div>
         <CardTitle className="text-2xl font-bold text-slate-900 mt-2">
           {actionLabels[rec.action]}

@@ -1,7 +1,7 @@
 # app/sustainability/reports.py
 import csv
 from io import StringIO, BytesIO
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 from app.sustainability import models as s_models
 from sqlalchemy.orm import Session
@@ -37,7 +37,7 @@ def generate_pdf_summary(db: Session, farm_id: int) -> bytes:
     For brevity: returns an HTML bytes; replace body with actual PDF conversion in production.
     """
     paddocks = db.query(s_models.Paddock).filter(s_models.Paddock.farm_id == farm_id).all()
-    html = f"<html><body><h1>Farm {farm_id} Sustainability Report</h1><p>Generated at {datetime.utcnow().isoformat()}</p>"
+    html = f"<html><body><h1>Farm {farm_id} Sustainability Report</h1><p>Generated at {lambda: datetime.now(timezone.utc)().isoformat()}</p>"
     for p in paddocks:
         html += f"<h2>Paddock {p.id} - {p.name}</h2>"
         rec = db.query(s_models.SustainabilityRecord).filter(s_models.SustainabilityRecord.paddock_id==p.id).order_by(s_models.SustainabilityRecord.recorded_at.desc()).first()

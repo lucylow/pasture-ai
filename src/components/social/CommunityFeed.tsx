@@ -31,11 +31,11 @@ export const CommunityFeed: React.FC = () => {
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-semibold">{post.author_name}</span>
-                <Badge variant="secondary" className="text-[10px] h-4">
+                <div className="inline-flex items-center rounded-full border border-transparent bg-secondary text-secondary-foreground px-2.5 py-0.5 text-[10px] h-4 font-semibold">
                   {post.type}
-                </Badge>
+                </div>
                 {post.peer_validated && (
-                  <ShieldCheck className="w-4 h-4 text-green-500" title="Peer Validated" />
+                  <ShieldCheck className="w-4 h-4 text-green-500" />
                 )}
               </div>
               <span className="text-xs text-muted-foreground">

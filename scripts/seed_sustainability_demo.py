@@ -12,7 +12,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.db.session import SessionLocal
 from app.db.base_class import engine, Base
 from app.sustainability import models as s_models
-from datetime import datetime, timedelta
+from datetime import datetime, timezone, timedelta
 import random
 
 def seed():
@@ -39,7 +39,7 @@ def seed():
             co2e = carbon_kg * (44.0/12.0)
             rec = s_models.SustainabilityRecord(
                 paddock_id=p.id,
-                recorded_at=datetime.utcnow() - timedelta(days=(6-m)*30),
+                recorded_at=lambda: datetime.now(timezone.utc)() - timedelta(days=(6-m)*30),
                 source="drone_demo",
                 area_m2=area_m2,
                 ndvi_mean=0.2 + (bm/600.0),
