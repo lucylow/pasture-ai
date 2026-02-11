@@ -17,7 +17,7 @@ function Metric({ title, value }: { title: string; value: string }) {
 
 function DemoContent() {
   const searchParams = useSearchParams();
-  const farmId = searchParams.get('farm') || 'f1';
+  const farmId = searchParams?.get('farm') || 'f1';
   const farm = mockFarmsForDemo.find((f) => f.id === farmId) || mockFarmsForDemo[0];
   const tile = farm.latestTile;
   return (
