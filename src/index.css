@@ -3,24 +3,31 @@
 @tailwind utilities;
 
 :root {
-  --background: 210 40% 98%;
-  --foreground: 222 47% 11%;
-  --primary: 142 40% 33%;
+  --background: 90 20% 96%;
+  --foreground: 120 20% 10%;
+  --primary: 120 27% 33%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 47% 11%;
+  --secondary: 90 15% 90%;
+  --secondary-foreground: 120 20% 15%;
+  --muted: 90 10% 92%;
+  --muted-foreground: 120 5% 45%;
+  --accent: 90 15% 88%;
+  --accent-foreground: 120 20% 15%;
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
-  --border: 214 32% 91%;
-  --ring: 142 40% 33%;
+  --card-foreground: 120 20% 10%;
+  --border: 90 15% 85%;
+  --ring: 120 27% 33%;
   --radius: 0.5rem;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+}
+
+* {
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
