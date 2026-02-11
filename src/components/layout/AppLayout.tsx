@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom'
 import { Leaf, Github } from 'lucide-react'
 
 const navLinks = [
-  { href: '#problem', label: 'Problem' },
-  { href: '#solution', label: 'Solution' },
-  { href: '#app-demo', label: 'Live Demo' },
-  { href: '#eco-tips', label: 'Eco Tips' },
-  { href: '#technical', label: 'Technical' },
-  { href: '/dashboard', label: 'Demo App', isRoute: true },
+  { href: '/', label: 'Home', isRoute: true },
+  { href: '/dashboard', label: 'Dashboard', isRoute: true },
+  { href: '/map', label: 'Map', isRoute: true },
+  { href: '/community', label: 'Community', isRoute: true },
+  { href: '/settings', label: 'Settings', isRoute: true },
 ]
 
 export function AppLayout({ children }: { children: ReactNode }) {
