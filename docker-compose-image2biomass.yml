@@ -1,0 +1,17 @@
+# Image2Biomass local dev: inference server + optional tiles
+# Usage: docker-compose -f docker-compose-image2biomass.yml up
+version: "3.7"
+services:
+  inference:
+    build:
+      context: .
+      dockerfile: inference_server/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

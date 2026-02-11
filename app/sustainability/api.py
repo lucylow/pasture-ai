@@ -9,6 +9,9 @@ from app.sustainability import models as s_models
 from app.sustainability import utils as s_utils
 from app.sustainability import planner as s_planner
 from app.sustainability import decision_logic as s_logic
+from app.services.audit_logger import log_decision
+
+AUDIT_MODEL_VERSIONS = {"image2biomass": "v1.2", "temporal_rnn": "v0.9", "decision_logic": "v1.0"}
 
 
 router = APIRouter(prefix="/api/v1/sustainability", tags=["sustainability"])
@@ -67,6 +70,18 @@ def create_record(payload: RecordIn, db: Session = Depends(get_db)):
     db.add(rec)
     db.commit()
     db.refresh(rec)
+
+    log_decision(
+        farm_id=str(payload.paddock_id or "default"),
+        pasture_id=str(payload.paddock_id or "default"),
+        decision_type="carbon",
+        model_versions=AUDIT_MODEL_VERSIONS,
+        inputs={"area_m2": payload.area_m2, "ndvi_mean": payload.ndvi_mean, "dry_biomass_g_m2": biomass},
+        outputs={"carbon_kg": carbon_kg, "co2e_kg": co2e},
+        constraints={},
+        user_id="api",
+    )
+
     return {
         "id": rec.id,
         "carbon_kg": carbon_kg,
@@ -83,13 +98,28 @@ class PlannerIn(BaseModel):
 
 @router.post("/plan", response_model=dict)
 def plan(payload: PlannerIn):
-    plan = s_planner.plan_rotational_grazing(
+    plan_result = s_planner.plan_rotational_grazing(
         paddocks=payload.paddocks,
         total_animal_units=payload.total_animal_units,
         rest_days_required=payload.rest_days_required,
         planning_horizon_days=payload.planning_horizon_days
     )
-    return plan
+    # Audit log for grazing plan
+    log_decision(
+        farm_id="default",
+        pasture_id="multi",
+        decision_type="grazing",
+        model_versions=AUDIT_MODEL_VERSIONS,
+        inputs={
+            "total_animal_units": payload.total_animal_units,
+            "planning_horizon_days": payload.planning_horizon_days,
+            "rest_days_required": payload.rest_days_required,
+        },
+        outputs={"allocations": plan_result.get("allocations", [])[:10]},
+        constraints={},
+        user_id="api",
+    )
+    return plan_result
 
 
 class DecisionStateIn(BaseModel):
@@ -106,14 +136,37 @@ class DecisionStateIn(BaseModel):
 
 @router.post("/decision/grazing")
 def get_grazing_decision(payload: DecisionStateIn):
-    state = s_logic.PastureState(**payload.dict())
-    return s_logic.grazing_recommendation(state)
+    data = payload.model_dump() if hasattr(payload, "model_dump") else payload.dict()
+    state = s_logic.PastureState(**data)
+    result = s_logic.grazing_recommendation(state)
+    log_decision(
+        farm_id="default",
+        pasture_id=payload.paddock_id,
+        decision_type="grazing",
+        model_versions=AUDIT_MODEL_VERSIONS,
+        inputs=data,
+        outputs=result,
+        constraints={},
+        user_id="api",
+    )
+    return result
 
 
 @router.post("/decision/harvest")
 def get_harvest_decision(payload: DecisionStateIn):
-    state = s_logic.PastureState(**payload.dict())
-    return s_logic.harvest_recommendation(state)
+    state = s_logic.PastureState(**payload.model_dump() if hasattr(payload, "model_dump") else payload.dict())
+    result = s_logic.harvest_recommendation(state)
+    log_decision(
+        farm_id="default",
+        pasture_id=payload.paddock_id,
+        decision_type="harvest",
+        model_versions=AUDIT_MODEL_VERSIONS,
+        inputs=payload.model_dump() if hasattr(payload, "model_dump") else payload.dict(),
+        outputs=result,
+        constraints={},
+        user_id="api",
+    )
+    return result
 
 
 @router.get("/decision/forecast")

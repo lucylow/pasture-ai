@@ -1,0 +1,5 @@
+[
+  {"id":"p1","farm_id":"f1","name":"Paddock North","area_ha":25,"slope":"gentle"},
+  {"id":"p2","farm_id":"f1","name":"Paddock South","area_ha":30,"slope":"flat"},
+  {"id":"p3","farm_id":"f2","name":"Delta 9","area_ha":20,"slope":"moderate"}
+]

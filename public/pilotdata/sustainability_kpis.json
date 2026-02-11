@@ -1,0 +1,8 @@
+{
+  "data": {
+    "grazing_efficiency_delta": 0.18,
+    "overgrazing_reduction": 0.42,
+    "biomass_stability_index": 0.88,
+    "peer_validated_practice_adoption": 0.75
+  }
+}

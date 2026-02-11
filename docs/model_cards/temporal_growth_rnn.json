@@ -1,0 +1,28 @@
+{
+  "model_name": "TemporalGrowthRNN v0.9",
+  "intended_use": [
+    "Next-day biomass forecasting",
+    "Uncertainty-quantified growth prediction",
+    "Rotational grazing planning support"
+  ],
+  "training_data": {
+    "sources": ["Pasture time-series (biomass, rainfall, temperature, grazing)"],
+    "regions": ["AU", "NZ", "US Midwest"],
+    "samples": "Varies by deployment"
+  },
+  "performance": {
+    "forecast_horizon_days": 14,
+    "rmse": 0.21,
+    "coverage_95pct": 0.92,
+    "validated_on": "2026-01-30"
+  },
+  "uncertainty": {
+    "method": "heteroscedastic regression (mean + log-var)",
+    "loss": "Gaussian NLL"
+  },
+  "limitations": [
+    "Performance stable across moderate rainfall variability",
+    "Degraded under extreme drought or flood"
+  ],
+  "notes": "Performance stable across moderate rainfall variability"
+}

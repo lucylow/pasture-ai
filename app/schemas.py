@@ -184,3 +184,84 @@ class FullBiomassPredictionResponse(BaseModel):
     recommendation: Recommendation
     explainability: Explainability
     provenance: Provenance
+
+# --- Image2Biomass Frontend-Aligned Schemas (matches src/types/image2biomass.ts) ---
+
+class VegetationHealth(str, Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+class BiomassTileUncertainty(BaseModel):
+    lower: float
+    upper: float
+    std: float
+
+class BiomassTile(BaseModel):
+    tileId: str
+    bounds: List[float]  # [minLng, minLat, maxLng, maxLat]
+    biomass_t_ha: float
+    uncertainty: BiomassTileUncertainty
+    vegetationHealth: VegetationHealth
+
+class SourceImageInfo(BaseModel):
+    type: str  # "satellite" | "drone"
+    resolution_cm: int
+    bands: List[str]
+    capturedAt: str
+
+class BiomassSnapshotSummary(BaseModel):
+    meanBiomass: float
+    minBiomass: float
+    maxBiomass: float
+    confidenceScore: float
+
+class BiomassSnapshot(BaseModel):
+    """Aligns with frontend BiomassSnapshot type."""
+    pastureId: str
+    date: str
+    sourceImage: SourceImageInfo
+    tiles: List[BiomassTile]
+    summary: BiomassSnapshotSummary
+
+class BiomassTimelineItem(BaseModel):
+    date: str
+    meanBiomass: float
+    uncertainty: List[float]  # [lower, upper]
+
+class GrazingRecommendation(BaseModel):
+    pastureId: str
+    decisionDate: str
+    recommendedAction: str  # graze_partial | graze_full | wait
+    grazeAreaPercent: float
+    grazeTonnes: float
+    expectedRecoveryDays: int
+    rationale: List[str]
+    confidence: float
+
+class CounterfactualScenario(BaseModel):
+    delayDays: int
+    biomass_t_ha: float
+    uncertainty: List[float]  # [lower, upper]
+
+class CarbonImpactEstimate(BaseModel):
+    pastureId: str
+    baselineCarbon_tCO2e_ha: float
+    postGrazingCarbon_tCO2e_ha: float
+    netChange: float
+    confidence: float
+    methodology: str
+
+class ImageQualityReport(BaseModel):
+    cloudCoverPercent: float
+    illuminationScore: float
+    sensorNoiseScore: float
+    alignmentQuality: str
+    modelConfidence: Dict  # overall, byBand
+
+class AuditPreview(BaseModel):
+    decisionId: str
+    timestamp: str
+    modelsUsed: Dict[str, str]
+    inputs: List[str]
+    outputs: List[str]

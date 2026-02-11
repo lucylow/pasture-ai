@@ -1,0 +1,5 @@
+[
+  {"paddock_id":"p1","week_start":"2026-02-03","dry_biomass_gm2":420,"overgrazing_events":0,"rest_days":14,"kpi_grazing_efficiency":0.92,"kpi_overgrazing_reduction":1.0},
+  {"paddock_id":"p2","week_start":"2026-02-03","dry_biomass_gm2":380,"overgrazing_events":0,"rest_days":21,"kpi_grazing_efficiency":0.88,"kpi_overgrazing_reduction":1.0},
+  {"paddock_id":"p3","week_start":"2026-02-03","dry_biomass_gm2":510,"overgrazing_events":0,"rest_days":28,"kpi_grazing_efficiency":0.95,"kpi_overgrazing_reduction":1.0}
+]

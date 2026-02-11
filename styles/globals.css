@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply min-h-screen bg-pasture-moss-50 text-slate-800 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-pasture-moss;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-pasture-moss px-4 py-2.5 text-sm font-medium text-white shadow-soft transition-all duration-200 hover:bg-pasture-moss/90 hover:shadow-md active:scale-[0.98];
+  }
+  .card-interactive {
+    @apply rounded-xl border border-slate-200/80 bg-white p-6 shadow-card transition-all duration-200 hover:border-pasture-meadow/40 hover:shadow-soft;
+  }
+}
+

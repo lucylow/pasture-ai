@@ -1,18 +1,20 @@
+// lovable.config.ts - Lovable Cloud deployment config for Next.js
 export default {
-  cloud: {
-    database: true,
-    auth: true,
-    storage: true,
-    functions: true,
-    secrets: ['MAPBOX_TOKEN', 'LOVABLE_AI_KEY']
+  name: "PastureAI Demo",
+  build: {
+    cmd: "npm run build",
+    cwd: "."
   },
-  frontend: {
-    framework: 'react',
-    bundler: 'vite',
-    styling: 'tailwind',
-    pwa: true
+  run: {
+    cmd: "npm run start",
+    port: 3000
   },
-  ai: {
-    models: ['gemini-2.0-flash', 'openai-gpt4o-mini']
-  }
-}
+  env: {
+    NODE_ENV: "production",
+    NEXT_TELEMETRY_DISABLED: "1"
+  },
+  node: {
+    version: "20"
+  },
+  static: { largeBlobs: true }
+};

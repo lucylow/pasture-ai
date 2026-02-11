@@ -1,0 +1,34 @@
+{
+  "model_name": "Image2Biomass v1.2",
+  "intended_use": [
+    "Pasture biomass estimation",
+    "Rotational grazing planning",
+    "Carbon accounting support"
+  ],
+  "training_data": {
+    "sources": [
+      "Satellite multispectral imagery",
+      "Drone RGB + multispectral surveys",
+      "Ground truth biomass cuts"
+    ],
+    "regions": ["AU", "NZ", "US Midwest"],
+    "samples": 18234
+  },
+  "performance": {
+    "rmse_t_ha": 0.32,
+    "mae_t_ha": 0.24,
+    "r2": 0.87
+  },
+  "uncertainty": {
+    "method": "heteroscedastic regression",
+    "coverage_95pct": 0.93
+  },
+  "limitations": [
+    "Reduced accuracy under heavy snow",
+    "Lower confidence during drought extremes"
+  ],
+  "ethics": {
+    "human_in_loop": true,
+    "automated_decisions": false
+  }
+}

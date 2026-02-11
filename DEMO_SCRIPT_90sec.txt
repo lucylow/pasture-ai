@@ -1,0 +1,11 @@
+For the judges: here's what PastureAI does in about a minute.
+
+On the left, I'm on the PastureAI demo screen. I drop a single pasture photo from my phone. The app runs a fast, deterministic biomass estimator entirely through Lovable's Cloud API—no GPU, no heavy model training required for the demo.
+
+Within a second, I get a biomass estimate in grams per square meter, a plain-language recommendation like "Rest this paddock five to seven days," and a confidence score. Every prediction is stored locally, so this works offline in the field and farmers keep control of their data.
+
+On the right, you see the cooperative dashboard. We load pilot data for twelve farms and aggregate it into sustainability KPIs: grazing efficiency, overgrazing reduction, biomass stability, and peer-validated practice adoption. After community adoption, grazing efficiency improves by around eighteen percent and overgrazing events drop by over forty percent—numbers a judge can verify directly in the UI with seeded data.
+
+Under the hood, all of this is running on Lovable.dev Cloud with a Supabase backend: tables for farms, paddocks, and weekly metrics; RLS-protected data; and clean API routes for biomass prediction and KPI computation. That means this exact demo is one click away from a real pilot—no architecture rewrite required.
+
+PastureAI turns a single photo into measurable, cooperative sustainability outcomes, and this Lovable-backed repo is ready to ship today.

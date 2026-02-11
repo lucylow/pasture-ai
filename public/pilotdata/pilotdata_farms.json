@@ -1,0 +1,5 @@
+[
+  {"id":"f1","name":"Springfield Pastures","coop_id":"coop1","area_ha":120,"country":"AU"},
+  {"id":"f2","name":"Valley Regenerative","coop_id":"coop1","area_ha":85,"country":"AU"},
+  {"id":"f3","name":"Green Hills Cooperative","coop_id":"coop2","area_ha":200,"country":"AU"}
+]
